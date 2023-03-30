@@ -1,23 +1,3 @@
-<?php
-/*$svgs = scandir('./assets');
-
-    mkdir('./assets1');
-
-    $figures = ['r', 'n', 'b', 'q', 'k', 'p'];
-    $figures = ['rook', 'horse', 'bishop', 'queen', 'king', 'pawn'];
-    foreach($svgs as $svg) {
-        if($svg == '.' || $svg == '..') {
-            continue;
-        }
-
-        $d = file_get_contents('./assets/'.$svg);
-    
-        $name = str_replace(['Chess_', '45.svg'], '', $svg);
-        echo $name."\n";
-    }
-
-    exit;*/
-?>
 <!DOCTYPE html>
 <html>
 
@@ -66,6 +46,8 @@
             font-size: 64px;
             line-height: 64px;
             text-align: center;
+            user-select: none;
+            cursor:pointer;
         }
 
         .cell.white {
