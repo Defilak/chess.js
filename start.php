@@ -40,9 +40,8 @@
             background-color: lightgray;
         }
 
-        #board {
-            border-collapse: collapse;
-
+        #board_el,
+        #board_overlay {
             display: grid;
             grid-template-columns: repeat(8, 1fr);
             grid-template-rows: repeat(8, 1fr);
@@ -52,7 +51,15 @@
             border: 2px solid #c9c9c9;
         }
 
-        #board>div,
+        #board_overlay {
+            background-color: black;
+            position: absolute;
+            top: 2px;
+            left: 66px;
+        }
+
+
+        #board_el>div,
         .cell {
             width: 64px;
             height: 64px;
@@ -61,10 +68,17 @@
             text-align: center;
         }
 
-        #board>div>img {
-            width: 100%;
-            height: 100%;
+        .cell.white {
+            background-color: #ffce9e;
+            border: 2px solid #ffdbad;
         }
+
+        .cell.black {
+            background-color: #d18b47;
+            border: 2px solid #c37405;
+        }
+
+        #board_el>.cell {}
 
         .vertical .cell,
         .horizontal .cell {
@@ -82,7 +96,7 @@
 
 <body>
     <div style="display:flex; flex-direction:column">
-        <div style="display:flex; flex-direction:row;">
+        <div style="display:flex; flex-direction:row;position:relative">
             <div class="vertical">
                 <div class="cell">8</div>
                 <div class="cell">7</div>
@@ -93,7 +107,8 @@
                 <div class="cell">2</div>
                 <div class="cell">1</div>
             </div>
-            <div id="board"></div>
+            <div id="board_el"></div>
+            <!--<div id="board_overlay"></div>-->
         </div>
         <div class="horizontal">
             <div class="cell">A</div>
@@ -107,44 +122,32 @@
         </div>
     </div>
 
+    <script type="module">
+        import {
+            Sprites
+        } from '/assets/figures.js'
+        import {
+            Board
+        } from '/assets/board.js'
 
-    <script type="text/javascript">
-        //const figuresTemplate = ['rook', 'horse', 'bishop', 'queen', 'king', 'bishop', 'horse', 'rook'];
-        const WhiteFigures = {
-            rook: '♖',
-            horse: '♘',
-            bishop: '♗',
-            queen: '♕',
-            king: '♔',
-            pawn: '♙',
-        }
-
-        const BlackFigures = {
-            rook: '♜',
-            horse: '♞',
-            bishop: '♝',
-            queen: '♛',
-            king: '♚',
-            pawn: '♟',
-        }
+        /*console.log(Sprites)
 
         function drawBoard() {
             board.innerHTML = ''
             for (var i = 0; i < 64; i++) {
                 const cell = document.createElement('div')
-                cell.className = 'cell'
+                cell.onclick = function() {
+                    //if (cell.style.backgroundColor == 'red') {
+                    //    cell.style.backgroundColor = ''
+                    //} else {
+                    //    cell.style.backgroundColor = 'red'
+                    //}
+                }
 
                 const x = Math.floor(i / 8)
                 const y = i % 8
 
-                if (x % 2 == y % 2) {
-                    cell.style.backgroundColor = '#ffce9e'
-                    cell.style.border = '2px solid #ffdbad'
-                } else {
-                    cell.style.backgroundColor = '#d18b47'
-                    cell.style.border = '2px solid #c37405'
-                }
-
+                cell.className = 'cell ' + ((x % 2 == y % 2) ? 'white' : 'black')
                 board.append(cell)
             }
         }
@@ -154,13 +157,11 @@
 
             // Заполняю 
             for (var i = 0; i < 8; i++) {
+                board.childNodes[1 * 8 + i].innerHTML = Sprites.white.pawn //WhiteFigures.pawn
+                board.childNodes[6 * 8 + i].innerHTML = Sprites.black.pawn //BlackFigures.pawn
 
-                board.childNodes[1 * 8 + i].innerHTML = WhiteFigures.pawn
-                board.childNodes[6 * 8 + i].innerHTML = BlackFigures.pawn
-
-                //board.childNodes[i].innerHTML = `♗`
-                board.childNodes[i].innerHTML = WhiteFigures[template[i]] //`<img src="/assets/Chess_${figuresTemplate[i]}dt45.svg"/>`
-                board.childNodes[7 * 8 + i].innerHTML = BlackFigures[template[i]] //`<img src="/assets/Chess_${figuresTemplate[i]}lt45.svg"/>`
+                board.childNodes[i].innerHTML = Sprites.white[template[i]]
+                board.childNodes[7 * 8 + i].innerHTML = Sprites.black[template[i]]
             }
         }
 
@@ -169,9 +170,11 @@
         }
 
         drawBoard()
-        fillStartingPositions()
+        fillStartingPositions()*/
 
-        //getCell(3, 4).style.backgroundColor = 'red'
+        const board = new Board
+        board.fillStartingPositions()
+        board.draw(document.getElementById('board_el'))
     </script>
 </body>
 
