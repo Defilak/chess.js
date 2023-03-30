@@ -1,0 +1,15 @@
+{
+    "name": "defi/chess",
+    "autoload": {
+        "psr-4": {
+            "Defi\\Chess\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Maxim",
+            "email": "defilak@mail.ru"
+        }
+    ],
+    "require": {}
+}
