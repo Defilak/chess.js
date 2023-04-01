@@ -47,7 +47,7 @@
             line-height: 64px;
             text-align: center;
             user-select: none;
-            cursor:pointer;
+            cursor: pointer;
         }
 
         .cell.white {
@@ -106,57 +106,79 @@
 
     <script type="module">
         import {
-            Sprites
-        } from '/assets/figures.js'
+            Pawn,
+            Rook,
+            Horse,
+            Bishop,
+            Queen,
+            King
+        } from './assets/figures.js'
         import {
             Board
         } from '/assets/board.js'
 
-        /*console.log(Sprites)
-
-        function drawBoard() {
-            board.innerHTML = ''
-            for (var i = 0; i < 64; i++) {
-                const cell = document.createElement('div')
-                cell.onclick = function() {
-                    //if (cell.style.backgroundColor == 'red') {
-                    //    cell.style.backgroundColor = ''
-                    //} else {
-                    //    cell.style.backgroundColor = 'red'
-                    //}
-                }
-
-                const x = Math.floor(i / 8)
-                const y = i % 8
-
-                cell.className = 'cell ' + ((x % 2 == y % 2) ? 'white' : 'black')
-                board.append(cell)
+        const Sprites = {
+            white: {
+                [Rook]: '♖',
+                [Horse]: '♘',
+                [Bishop]: '♗',
+                [Queen]: '♕',
+                [King]: '♔',
+                [Pawn]: '♙',
+            },
+            black: {
+                [Rook]: '♜',
+                [Horse]: '♞',
+                [Bishop]: '♝',
+                [Queen]: '♛',
+                [King]: '♚',
+                [Pawn]: '♟',
             }
         }
 
-        function fillStartingPositions() {
-            const template = ['rook', 'horse', 'bishop', 'queen', 'king', 'bishop', 'horse', 'rook'];
+        /**
+         * Рендерю в указанный элемент шахматные фигуры.
+         * @param {*} boardEl - DOM елемент для заполнения
+         */
+        function draw(board, boardEl) {
+            boardEl.innerHTML = ''
 
-            // Заполняю 
-            for (var i = 0; i < 8; i++) {
-                board.childNodes[1 * 8 + i].innerHTML = Sprites.white.pawn //WhiteFigures.pawn
-                board.childNodes[6 * 8 + i].innerHTML = Sprites.black.pawn //BlackFigures.pawn
+            board.map.forEach((arr, y) => {
+                arr.forEach((cell, x) => {
+                    const cellEl = document.createElement('div')
 
-                board.childNodes[i].innerHTML = Sprites.white[template[i]]
-                board.childNodes[7 * 8 + i].innerHTML = Sprites.black[template[i]]
-            }
+                    cellEl.className = 'cell ' + ((x % 2 == y % 2) ? 'white' : 'black')
+
+                    if (cell) {
+                        if (cell.getColor() == 'white') {
+                            cellEl.innerHTML = Sprites.white[cell.constructor]
+                        } else {
+                            cellEl.innerHTML = Sprites.black[cell.constructor]
+                        }
+
+                        cellEl.onclick = () => {
+                            if (cellEl.backgroundColor == 'red') {
+                                draw(boardEl)
+                            } else {
+                                cellEl.backgroundColor = 'red'
+
+                                var pawn = new Pawn(x, y, '')
+                                var moves = pawn.getMoves(board)
+                                moves.forEach(i => {
+                                    boardEl.childNodes[i].style.backgroundColor = 'red'
+                                })
+                            }
+                        }
+                    }
+
+                    boardEl.append(cellEl)
+                })
+            })
         }
 
-        function getCell(x, y) {
-            return board.childNodes[x * 8 + y]
-        }
-
-        drawBoard()
-        fillStartingPositions()*/
-
-        const board = new Board
+        const board = new Board()
         board.fillStartingPositions()
-        board.draw(document.getElementById('board_el'))
+        draw(board, document.getElementById('board_el'))
     </script>
 </body>
 
