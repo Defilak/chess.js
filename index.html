@@ -96,6 +96,20 @@
 
         }
 
+        .score {
+            display:flex;
+            flex-direction: row;
+        }
+
+        .score > .score-white-col, .score > .score-black-col {
+            flex-grow:1;
+            flex-shrink: 0;
+        }
+
+        #score_white, #score_black {
+            display:flex;
+        }
+
     </style>
 
 </head>
@@ -131,89 +145,22 @@
     <div class="info-container">
         <div class="info-card">
             <h3 id="move_queue_text">Очередь белых</h3>
+            <div class="score">
+                <div class="score-white-col">
+                    <h4>Взятия белыми</h4>
+                    <div id="score_white"></div>
+                </div>
+                <div class="score-black-col">
+                    <h4>Взятия черными</h4>
+                    <div id="score_black"></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script type="module">
-        import {
-            Pawn,
-            Rook,
-            Horse,
-            Bishop,
-            Queen,
-            King
-        } from './assets/figures.js'
-        import Board from '/assets/board.js'
-
-        /*const Sprites = {
-            white: {
-                [Rook]: '♖',
-                [Horse]: '♘',
-                [Bishop]: '♗',
-                [Queen]: '♕',
-                [King]: '♔',
-                [Pawn]: '♙',
-            },
-            black: {
-                [Rook]: '♜',
-                [Horse]: '♞',
-                [Bishop]: '♝',
-                [Queen]: '♛',
-                [King]: '♚',
-                [Pawn]: '♟',
-            }
-        }
-
-        /**
-         * Рендерю в указанный элемент шахматные фигуры.
-         * @param {*} boardEl - DOM елемент для заполнения
-         */
-        /*function draw(board, boardEl) {
-            boardEl.innerHTML = ''
-
-            board.map.forEach((arr, y) => {
-                arr.forEach((cell, x) => {
-                    const cellEl = document.createElement('div')
-
-                    cellEl.className = 'cell ' + ((x % 2 == y % 2) ? 'white' : 'black')
-
-                    if (cell) {
-                        if (cell.getColor() == 'white') {
-                            cellEl.innerHTML = Sprites.white[cell.constructor]
-                        } else {
-                            cellEl.innerHTML = Sprites.black[cell.constructor]
-                        }
-
-                        cellEl.onclick = () => {
-                            if (cellEl.backgroundColor == 'red') {
-                                draw(board, boardEl)
-                            } else {
-                                cellEl.backgroundColor = 'red'
-
-                                var pawn = new Pawn(x, y, '')
-                                var moves = pawn.getMoves(board)
-                                moves.forEach(i => {
-                                    boardEl.childNodes[i].style.backgroundColor = 'red'
-                                })
-                            }
-                        }
-                    }
-
-                    boardEl.append(cellEl)
-                })
-            })
-        }*/
-
         import Game from './assets/game.js'
-        import Screen from './assets/screen.js'
 
-        //const board = new Board()
-        //board.fillStartingPositions()
-
-
-        //console.log('asd')
-        //screen.render(board)
-        //const screen = new Screen()
         const game = new Game()
         game.start()
         window.game = game
