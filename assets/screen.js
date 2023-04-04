@@ -83,7 +83,9 @@ export default class Screen {
             cellEl.style.backgroundColor = 'red'
             var moves = this.selected.getMoves(board)
             moves.forEach(i => {
-                this.boardEl.childNodes[i].style.backgroundColor = 'red'
+                if(i < this.boardEl.childNodes.length && i >= 0) {
+                    this.boardEl.childNodes[i].style.backgroundColor = 'red'
+                }
             })
         }
     }
