@@ -61,15 +61,10 @@ export default class Game {
             this.board.rotateBoard()
 
             // переворачиваю полученные элементы массива
-            var rotatedIds = []
-            moves.forEach(id => {
+            return moves.map(id => {
                 const point = idToXy(id)
-                point.x = 7 - point.x
-                point.y = 7 - point.y
-
-                rotatedIds.push(xyToId(point.x, point.y))
+                return xyToId(7 - point.x, 7 - point.y)
             })
-            return rotatedIds
         }
 
         return moves

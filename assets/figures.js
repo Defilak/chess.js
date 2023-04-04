@@ -54,10 +54,13 @@ export class Pawn extends Figure {
         }
 
         //Пешка ходит на поле, занимаемое фигурой или пешкой противника, которая расположена по диагонали на смежной вертикали, одновременно забирая эту фигуру или пешку.
-        if (board.getFigure(this.x + 1, this.y - 1) && this.x + 1 < 8) {
+        figure = board.getFigure(this.x + 1, this.y - 1)
+        if (figure && figure.getColor() != this.getColor() && this.x + 1 < 8) {
             moves.push(xyToId(this.x + 1, this.y - 1))
         }
-        if (board.getFigure(this.x - 1, this.y - 1) && this.x - 1 >= 0) {
+        
+        figure = board.getFigure(this.x - 1, this.y - 1)
+        if (figure && figure.getColor() != this.getColor() && this.x - 1 >= 0) {
             moves.push(xyToId(this.x - 1, this.y - 1))
         }
 
