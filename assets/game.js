@@ -1,10 +1,15 @@
 import Board from './board.js'
+import Screen from './screen.js'
 
 export default class Game {
     history = []
+    eatedBy = {
+        white: [],
+        black: []
+    }
 
-    constructor(screen) {
-        this.screen = screen
+    constructor() {
+        this.screen = new Screen(this)
         this.board = new Board()
     }
 
@@ -14,10 +19,19 @@ export default class Game {
     }
 
     /**
-     * Сделать ход
+     * Передвинуть фигуру на указанные координаты
      */
-    makeMove(player, move) {
-        this.screen.render(this.board)
+    makeMove(figure, x, y) {
+        console.log('make move')
+
+        const target = this.board.getFigure(x, y)
+        // Забираю если есть что
+        if(target && target.getColor() != figure.getColor()) {
+            this.eatedBy[figure.getColor()].push(target)
+        }
+
+        // Перемещаю фигуру
+        this.board.setFigure(x, y, figure)
     }
 
     getHistory() {

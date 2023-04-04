@@ -9,7 +9,7 @@ export default class Board {
         this.map.forEach((arr, y) => arr.fill(null))
     }
 
-    getCell(x, y) {
+    getFigure(x, y) {
         if (y < 0 || y >= this.map.length)
             return false
         if (x < 0 || x >= this.map[y].length)
@@ -18,10 +18,17 @@ export default class Board {
         return this.map[y][x]
     }
 
-    setCell(x, y, figureType, color) {
+    addFigure(x, y, figureType, color) {
         if(figureType) {
             this.map[y][x] = new figureType(x, y, color)
         }
+    }
+
+    setFigure(x, y, figure) {
+        //todo: дублирование данных
+        this.map[figure.y][figure.x] = false
+        this.map[y][x] = figure
+        figure.move(x, y)
     }
  
     /**
@@ -32,11 +39,11 @@ export default class Board {
 
         const template = [Rook, Horse, Bishop, Queen, King, Bishop, Horse, Rook];
         for (var x = 0; x < 8; x++) {
-            this.setCell(x, 0, template[x], 'black')
-            this.setCell(x, 1, Pawn, 'black')
+            this.addFigure(x, 0, template[x], 'black')
+            this.addFigure(x, 1, Pawn, 'black')
 
-            this.setCell(x, 6, Pawn, 'white')
-            this.setCell(x, 7, template[x], 'white')
+            this.addFigure(x, 6, Pawn, 'white')
+            this.addFigure(x, 7, template[x], 'white')
 
 
             //this.setCell(0, 6, Pawn, 'white')

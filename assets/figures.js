@@ -1,4 +1,4 @@
-import { xyToId, idToXy, addMove } from './util.js'
+import { xyToId, addMove } from './util.js'
 
 export const WHITE = 'white'
 export const BLACK = 'black'
@@ -16,7 +16,10 @@ export class Figure {
 
     getIcon() { }
 
-    move() { }
+    move(x, y) {
+        this.x = x
+        this.y = y
+    }
 
     /**
      * Возвращает доступные ходы в виде id массива карты.
@@ -37,20 +40,20 @@ export class Pawn extends Figure {
 
         //С исходной позиции пешка может продвинуться на два поля по той же самой вертикали, если оба эти поля не заняты.
         if (this.y == 6) {
-            if (!board.getCell(this.x, this.y - 1)) {
+            if (!board.getFigure(this.x, this.y - 1)) {
                 moves.push(xyToId(this.x, this.y - 1))
             }
 
-            if (!board.getCell(this.x, this.y - 2)) {
+            if (!board.getFigure(this.x, this.y - 2)) {
                 moves.push(xyToId(this.x, this.y - 2))
             }
         }
 
         //Пешка ходит на поле, занимаемое фигурой или пешкой противника, которая расположена по диагонали на смежной вертикали, одновременно забирая эту фигуру или пешку.
-        if (board.getCell(this.x + 1, this.y - 1) && this.x + 1 < 8) {
+        if (board.getFigure(this.x + 1, this.y - 1) && this.x + 1 < 8) {
             //moves.push(xyToId(this.x + 1, this.y - 1))
         }
-        if (board.getCell(this.x - 1, this.y - 1) && this.x - 1 >= 0) {
+        if (board.getFigure(this.x - 1, this.y - 1) && this.x - 1 >= 0) {
             //moves.push(xyToId(this.x - 1, this.y - 1))
         }
 
@@ -66,7 +69,7 @@ export class Rook extends Figure {
         //Ладья может двигаться на любое число полей по горизонтали или по вертикали при условии, что на её пути нет фигур.
 
         const checkPath = (x, y) => {
-            var figure = board.getCell(x, y)
+            var figure = board.getFigure(x, y)
             if (!figure) {
                 addMove(x, y, moves)
                 return true
@@ -107,7 +110,7 @@ export class Horse extends Figure {
 
         // Добавляет ход только если клетка пустая либо если там нет союзника
         const ifNotFriendly = (x, y, moves) => {
-            const figure = board.getCell(x, y)
+            const figure = board.getFigure(x, y)
             if (!figure || figure.getColor() != this.getColor()) {
                 addMove(x, y, moves)
             }
@@ -137,7 +140,7 @@ export class Bishop extends Figure {
         // Проверяю все диагонали, останавливаюсь если на пути фигура
         // Если это фигура вражеская, захватываю ее в ход и после этого останавливаюсь
         const checkPath = (x, y) => {
-            var figure = board.getCell(x, y)
+            var figure = board.getFigure(x, y)
             if (!figure) {
                 addMove(x, y, moves)
                 return true
@@ -170,28 +173,28 @@ export class Bishop extends Figure {
         // Флаги остановки возможных ходов
         /*var xy1 = true, xy2 = true, xy3 = true, xy4 = true
         for(var i = 0; i < 8; i++) {
-            if(!board.getCell(this.x + i, this.y + i) && xy1) {
+            if(!board.getFigure(this.x + i, this.y + i) && xy1) {
                 addMove(this.x + i, this.y + i, moves)
-            } else if (board.getCell(this.x + i, this.y + i).getColor() != this.getColor()) {
+            } else if (board.getFigure(this.x + i, this.y + i).getColor() != this.getColor()) {
                 addMove(this.x + i, this.y + i, moves)
                 xy1 = false
             } else {
                 xy1 = false
             }
 
-            if(!board.getCell(this.x - i, this.y - i) && xy2) {
+            if(!board.getFigure(this.x - i, this.y - i) && xy2) {
                 addMove(this.x - i, this.y - i, moves)
             } else {
                 xy2 = false
             }
 
-            if(!board.getCell(this.x + i, this.y - i) && xy3) {
+            if(!board.getFigure(this.x + i, this.y - i) && xy3) {
                 addMove(this.x + i, this.y - i, moves)
             } else {
                 xy3 = false
             }
 
-            if(!board.getCell(this.x - i, this.y + i) && xy4) {
+            if(!board.getFigure(this.x - i, this.y + i) && xy4) {
                 addMove(this.x - i, this.y + i, moves)
             } else {
                 xy4 = false
@@ -227,7 +230,7 @@ export class King extends Figure {
         //Минимальное расстояние между королями обеих сторон всегда должно составлять одно поле, которое ни один из них не имеет права занимать
         for (var y = -1; y < 2; y++) {
             for (var x = -1; x < 2; x++) {
-                const figure = board.getCell(this.x + x, this.y + y)
+                const figure = board.getFigure(this.x + x, this.y + y)
                 if (!figure || figure.getColor() != this.getColor()) {
                     addMove(this.x + x, this.y + y, moves)
                 }

@@ -6,7 +6,7 @@ import {
     Queen,
     King
 } from './figures.js'
-import { xyToId } from './util.js'
+import { idToXy, xyToId } from './util.js'
 
 const Sprites = {
     white: {
@@ -30,7 +30,8 @@ const Sprites = {
 export default class Screen {
     selected = false
 
-    constructor(boardEl) {
+    constructor(game) {
+        this.game = game
         this.boardEl = document.getElementById('board_el')
     }
 
@@ -42,8 +43,7 @@ export default class Screen {
                 const cellEl = document.createElement('div')
 
                 cellEl.className = 'cell ' + ((x % 2 == y % 2) ? 'white' : 'black')
-
-
+                
                 if (cell) {
                     // Рисую фигуры
                     if (cell.getColor() == 'white') {
@@ -53,6 +53,7 @@ export default class Screen {
                     }
 
                     cellEl.onclick = () => {
+                        
                         if (this.selected != cell) {
                             this.selected = cell
                         } else {
@@ -81,10 +82,17 @@ export default class Screen {
         if (this.selected) {
             const cellEl = this.boardEl.childNodes[xyToId(this.selected.x, this.selected.y)]
             cellEl.style.backgroundColor = 'red'
+
             var moves = this.selected.getMoves(board)
             moves.forEach(i => {
                 if(i < this.boardEl.childNodes.length && i >= 0) {
                     this.boardEl.childNodes[i].style.backgroundColor = 'red'
+                    this.boardEl.childNodes[i].onclick = () => {
+                        const coords = idToXy(i)
+                        this.game.makeMove(this.selected, coords.x, coords.y)
+                        this.selected = false
+                        this.render(board)
+                    }
                 }
             })
         }

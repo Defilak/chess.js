@@ -6,8 +6,8 @@ export function xyToId(x, y) {
 
 export function idToXy(id) {
     return {
-        x: Math.floor(id / 8),
-        y: id % 8
+        x: id % 8,
+        y: Math.floor(id / 8)
     }
 }
 
