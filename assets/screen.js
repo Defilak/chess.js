@@ -49,7 +49,8 @@ export default class Screen {
             const cellEl = this.boardEl.childNodes[xyToId(this.selected.x, this.selected.y)]
             cellEl.style.backgroundColor = 'red'
 
-            var moves = this.selected.getMoves(board)
+            var moves = this.game.getMovesFor(this.selected)
+            //var moves = this.selected.getMoves(board)
             moves.forEach(i => {
                 if (i < this.boardEl.childNodes.length && i >= 0) {
                     this.boardEl.childNodes[i].style.backgroundColor = 'red'

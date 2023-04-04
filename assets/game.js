@@ -1,5 +1,6 @@
 import Board from './board.js'
 import Screen from './screen.js'
+import { idToXy, xyToId } from './util.js'
 
 export default class Game {
     history = []
@@ -41,6 +42,37 @@ export default class Game {
         // Перемещаю фигуру
         this.board.setFigure(x, y, figure)
         this.queue = (this.queue == 'white') ? 'black' : 'white'
+    }
+
+    /**
+     * Возвращает доступные фигуре ходы в зависимости от ее цвета
+     */
+    getMovesFor(figure) {
+        var map = this.board.map
+        if(figure.getColor() == 'black') {
+            // Переворачиваю карту для того чтобы не переписывать вычисления ходов для черных фигур
+            this.board.rotateBoard()
+        }
+
+        const moves = figure.getMoves(this.board)
+
+        if(figure.getColor() == 'black') {
+            // переворачиваю обратно)
+            this.board.rotateBoard()
+
+            // переворачиваю полученные элементы массива
+            var rotatedIds = []
+            moves.forEach(id => {
+                const point = idToXy(id)
+                point.x = 7 - point.x
+                point.y = 7 - point.y
+
+                rotatedIds.push(xyToId(point.x, point.y))
+            })
+            return rotatedIds
+        }
+
+        return moves
     }
 
     getHistory() {

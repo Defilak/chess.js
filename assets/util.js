@@ -15,7 +15,7 @@ export function idToXy(id) {
  * Выполняет функцию если 2 координаты находятся в рамках доски 
  */
 export function ifInBoard(x, y, cb) {
-    if(0 < x < 8 && 0 < y < 8) {
+    if (0 < x < 8 && 0 < y < 8) {
         cb(x, y)
     }
 }
@@ -24,20 +24,26 @@ export function ifInBoard(x, y, cb) {
  * Добавляет координаты в массив если они в рамках доски
  */
 export function addMove(x, y, arr) {
-    if(0 <= x && x < 8 && 0 <= y && y < 8) {
+    if (0 <= x && x < 8 && 0 <= y && y < 8) {
         arr.push(xyToId(x, y))
     }
 }
 
 /**
- * Переворачивает и смещает матрицу 8x8
+ * Переворачивает матрицу (доску) на 180 градусов
  */
 export function rotateMatrix(matrix) {
-    let result = Array(arr.length)
+    var result = [Array(8), Array(8), Array(8), Array(8), Array(8), Array(8), Array(8), Array(8)]
 
-    for(var y = 0; y < 8; y++) {
-        for(var x = 0; y < 8;y++) {
-
+    var y = 0
+    for (var i = matrix.length - 1; i >= 0; i--) {
+        var x = 0
+        for (var j = matrix[i].length - 1; j >= 0; j--) {
+            result[y][x] = matrix[i][j]
+            x++
         }
+        y++
     }
+
+    return result
 }

@@ -32,11 +32,15 @@ export class Figure {
  */
 export class Pawn extends Figure {
 
+    // Для черных переворачиваю доску см. Game.getMovesFor
     getMoves(board) {
         const moves = []
 
         //Пешка может ходить вперёд на свободное поле, расположенное непосредственно перед ней на той же самой вертикали.
-        //moves.push(xyToId(this.x, this.y - 1))
+        var figure = board.getFigure(this.x, this.y - 1)
+        if(!figure || figure.getColor() != this.getColor()) {
+            addMove(this.x, this.y -1, moves)
+        }
 
         //С исходной позиции пешка может продвинуться на два поля по той же самой вертикали, если оба эти поля не заняты.
         if (this.y == 6) {
@@ -51,10 +55,10 @@ export class Pawn extends Figure {
 
         //Пешка ходит на поле, занимаемое фигурой или пешкой противника, которая расположена по диагонали на смежной вертикали, одновременно забирая эту фигуру или пешку.
         if (board.getFigure(this.x + 1, this.y - 1) && this.x + 1 < 8) {
-            //moves.push(xyToId(this.x + 1, this.y - 1))
+            moves.push(xyToId(this.x + 1, this.y - 1))
         }
         if (board.getFigure(this.x - 1, this.y - 1) && this.x - 1 >= 0) {
-            //moves.push(xyToId(this.x - 1, this.y - 1))
+            moves.push(xyToId(this.x - 1, this.y - 1))
         }
 
         //todo: Пешка, атакующая поле, пересечённое пешкой партнёра, который продвинул её с исходной позиции сразу на два поля, может взять эту продвинутую пешку, как если бы последний её ход был только на одно поле. Это взятие может быть сделано только очередным ходом и называется «взятием на проходе».

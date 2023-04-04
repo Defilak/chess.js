@@ -1,4 +1,5 @@
 import { Pawn, Rook, Horse, Bishop, Queen, King } from './figures.js'
+import { rotateMatrix } from './util.js'
 
 export default class Board {
 
@@ -7,6 +8,19 @@ export default class Board {
 
     constructor() {
         this.map.forEach((arr, y) => arr.fill(null))
+    }
+
+    /**
+     * Переворачивает доску на 180 градусов
+     */
+    rotateBoard() {
+        this.map = rotateMatrix(this.map)
+        this.map.forEach((horisontal, y) => {
+            horisontal.forEach((figure, x) => {
+                if (figure)
+                    figure.move(x, y)
+            })
+        })
     }
 
     getFigure(x, y) {
@@ -19,7 +33,7 @@ export default class Board {
     }
 
     addFigure(x, y, figureType, color) {
-        if(figureType) {
+        if (figureType) {
             this.map[y][x] = new figureType(x, y, color)
         }
     }
@@ -30,7 +44,7 @@ export default class Board {
         this.map[y][x] = figure
         figure.move(x, y)
     }
- 
+
     /**
      * Очищает доску и добавляет фигуры на стартовых позициях
      */
