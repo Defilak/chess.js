@@ -15,9 +15,14 @@
             width: 100%;
             height: 100vh;
             display: flex;
+            flex-direction: row;
             justify-content: center;
             align-items: center;
             background-color: lightgray;
+        }
+
+        h3 {
+            margin: 0;
         }
 
         #board_el,
@@ -72,12 +77,31 @@
             flex-direction: row;
             padding-left: 66px
         }
+
+        .board-container {
+            display:flex; flex-direction:column;margin-right: 32px;
+        }
+
+        .info-container {
+            width: 576px;
+            height:576px;
+            margin-left: 32px;
+        }
+
+        .info-card {
+            border: 1px solid rgba(203,213,224, 1);
+            border-radius: 0.25rem;
+            padding: 1.5rem;
+            background-color:white;
+
+        }
+
     </style>
 
 </head>
 
 <body>
-    <div style="display:flex; flex-direction:column">
+    <div class="board-container">
         <div style="display:flex; flex-direction:row;position:relative">
             <div class="vertical">
                 <div class="cell">8</div>
@@ -104,6 +128,12 @@
         </div>
     </div>
 
+    <div class="info-container">
+        <div class="info-card">
+            <h3 id="move_queue_text">Очередь белых</h3>
+        </div>
+    </div>
+
     <script type="module">
         import {
             Pawn,
@@ -113,11 +143,9 @@
             Queen,
             King
         } from './assets/figures.js'
-        import {
-            Board
-        } from '/assets/board.js'
+        import Board from '/assets/board.js'
 
-        const Sprites = {
+        /*const Sprites = {
             white: {
                 [Rook]: '♖',
                 [Horse]: '♘',
@@ -140,7 +168,7 @@
          * Рендерю в указанный элемент шахматные фигуры.
          * @param {*} boardEl - DOM елемент для заполнения
          */
-        function draw(board, boardEl) {
+        /*function draw(board, boardEl) {
             boardEl.innerHTML = ''
 
             board.map.forEach((arr, y) => {
@@ -158,7 +186,7 @@
 
                         cellEl.onclick = () => {
                             if (cellEl.backgroundColor == 'red') {
-                                draw(boardEl)
+                                draw(board, boardEl)
                             } else {
                                 cellEl.backgroundColor = 'red'
 
@@ -174,11 +202,22 @@
                     boardEl.append(cellEl)
                 })
             })
-        }
+        }*/
 
-        const board = new Board()
-        board.fillStartingPositions()
-        draw(board, document.getElementById('board_el'))
+        import Game from './assets/game.js'
+        import Screen from './assets/screen.js'
+
+        //const board = new Board()
+        //board.fillStartingPositions()
+
+
+        const screen = new Screen(document.getElementById('board_el'))
+        //console.log('asd')
+        //screen.render(board)
+        //const screen = new Screen()
+        const game = new Game(screen)
+        game.start()
+        window.game = game
     </script>
 </body>
 

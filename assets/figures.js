@@ -61,23 +61,43 @@ export class Pawn extends Figure {
 }
 
 export class Rook extends Figure {
+    getMoves(board) {
+        const moves = []
 
+        return moves
+    }
 }
 
 export class Horse extends Figure {
+    getMoves(board) {
+        const moves = []
 
+        return moves
+    }
 }
 
 export class Bishop extends Figure {
+    getMoves(board) {
+        const moves = []
 
+        return moves
+    }
 }
 
 export class Queen extends Figure {
+    getMoves(board) {
+        const moves = []
 
+        return moves
+    }
 }
 
 export class King extends Figure {
+    getMoves(board) {
+        const moves = []
 
+        return moves
+    }
 }
 
 export default {
