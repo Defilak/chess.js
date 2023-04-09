@@ -36,6 +36,7 @@ export default class Screen {
         this.queueTextEl = document.getElementById('move_queue_text')
         this.scoreWhite = document.getElementById('score_white')
         this.scoreBlack = document.getElementById('score_black')
+        this.historyList = document.getElementById('history_list')
     }
 
     render(board) {
@@ -43,6 +44,7 @@ export default class Screen {
         this.drawBoard(board)
         this.drawMoveQueue()
         this.drawScore()
+        this.drawHistory()
 
         // Отрисовываю возможные ходы
         if (this.selected) {
@@ -82,7 +84,6 @@ export default class Screen {
             arr.forEach((cell, x) => {
                 const cellEl = document.createElement('div')
                 cellEl.className = 'cell ' + ((x % 2 == y % 2) ? 'white' : 'black')
-                //cellEl.innerHTML = xyToId(x, y)
                 if (cell) {
                     // Рисую фигуры
                     if (cell.getColor() == 'white') {
@@ -139,5 +140,17 @@ export default class Screen {
 
             this.scoreBlack.append(el)
         })
+    }
+
+    drawHistory() {
+        this.historyList.innerHTML = ''
+        this.game.history.forEach(entry => {
+            console.log('asd')
+            const el = document.createElement('li')
+            el.innerHTML = Sprites[entry.figure.getColor()][entry.figure.constructor] + '' + entry.start + ' > ' + entry.end
+
+            this.historyList.append(el)
+        })
+        this.historyList.scrollTo(0, this.historyList.scrollHeight)
     }
 }

@@ -56,6 +56,13 @@ export default class Game {
      */
     makeMove(figure, x, y) {
         var target = this.board.getFigure(x, y)
+
+        // Начальное положение фигуры, для истории
+        const startPos = {
+            x: figure.x,
+            y: figure.y 
+        }
+
         // Забираю если есть что
         if (target && target.getColor() != figure.getColor()) {
             this.eatedBy[figure.getColor()].push(target)
@@ -98,6 +105,13 @@ export default class Game {
         }
 
         this.queue = (this.queue == 'white') ? 'black' : 'white'
+
+        this.history.push({
+            figure,
+            start: this.board.getMoveNotation(startPos.x, startPos.y),
+            end: this.board.getMoveNotation(figure.x, figure.y),
+            map: structuredClone(this.board.map)
+        })
     }
 
     /**
@@ -110,6 +124,7 @@ export default class Game {
         }
 
         var moves = figure.getMoves(this.board)
+        console.log(moves)
 
         // Если фигура - король, фильтрую невозможные ходы
         if (figure.constructor == King) {

@@ -3,6 +3,8 @@ import { rotateMatrix } from './util.js'
 
 export default class Board {
 
+    horizontals = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+
     // Это матрица стола
     map = [Array(8), Array(8), Array(8), Array(8), Array(8), Array(8), Array(8), Array(8)]
 
@@ -79,6 +81,10 @@ export default class Board {
         return result
     }
 
+    getMoveNotation(x, y) {
+        return this.horizontals[x] + (8 - y)
+    }
+
     /**
      * Очищает доску и добавляет фигуры на стартовых позициях
      */
@@ -87,12 +93,17 @@ export default class Board {
 
         const template = [Rook, Horse, Bishop, Queen, King, Bishop, Horse, Rook];
         for (var x = 0; x < 8; x++) {
-            this.addFigure(x, 0, template[x], 'black')
-            this.addFigure(x, 1, Pawn, 'black')
-            this.addFigure(x, 6, Pawn, 'white')
-            this.addFigure(x, 7, template[x], 'white')
+            //this.addFigure(x, 0, template[x], 'black')
+            //this.addFigure(x, 1, Pawn, 'black')
+            //this.addFigure(x, 6, Pawn, 'white')
+            //this.addFigure(x, 7, template[x], 'white')
         }
-        //this.addFigure(4, 3, Pawn, 'white')
-        //this.addFigure(3, 3, King, 'black') 
+        this.addFigure(0, 0, Rook, 'black')
+        this.addFigure(7, 0, Rook, 'black')
+        this.addFigure(4, 0, King, 'black') 
+
+        this.addFigure(0, 7, Rook, 'white')
+        this.addFigure(7, 7, Rook, 'white')
+        this.addFigure(4, 7, King, 'white') 
     }
 }
