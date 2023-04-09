@@ -41,7 +41,7 @@ export default class Game {
         var filtered = this.board.map.flat().filter(figure => figure != null)
 
         if (color) {
-            filtered.filter(figure => figure.getColor() == color)
+            filtered = filtered.filter(figure => figure.getColor() == color)
         }
 
         filtered.forEach(figure => {
