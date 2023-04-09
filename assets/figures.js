@@ -236,11 +236,22 @@ export class King extends Figure {
 
         // Проверяю возможность рокировки
         if (!this.beenMoved) {
+            // Проверка на цвет
+            var shortPos
+            var longPos
+            if(this.getColor() == 'white') {
+                shortPos = 3
+                longPos = 4
+            } else {
+                shortPos = 4
+                longPos = 3
+            }
+
             // Короткая рокировка
-            for (var i = 1; i < 4; i++) {
+            for (var i = 1; i < 5; i++) {
                 const figure = board.getFigure(this.x + i, this.y)
                 // Проверка на цвет не нужна т.к. для этого фигура должна быть сдвинута
-                if (i == 3 && figure && figure.constructor == Rook && !figure.beenMoved && figure.getColor() == this.getColor()) {
+                if (i == shortPos && figure && figure.constructor == Rook && !figure.beenMoved && figure.getColor() == this.getColor()) {
                     addMove(this.x + i, this.y, moves)
                 }
 
@@ -252,7 +263,8 @@ export class King extends Figure {
             // Длинная рокировка
             for (var i = 1; i < 5; i++) {
                 const figure = board.getFigure(this.x - i, this.y)
-                if (i == 4 && figure && figure.constructor == Rook && !figure.beenMoved && figure.getColor() == this.getColor()) {
+                if (i == longPos && figure && figure.constructor == Rook && !figure.beenMoved && figure.getColor() == this.getColor()) {
+                    //console.log(i)
                     addMove(this.x - i, this.y, moves)
                 }
 
