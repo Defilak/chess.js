@@ -1,4 +1,5 @@
 import Board from './board.js'
+import { King, Rook } from './figures.js'
 import Screen from './screen.js'
 import { idToXy, xyToId } from './util.js'
 
@@ -20,7 +21,7 @@ export default class Game {
     start() {
         this.board.fillStartingPositions()
         this.screen.render(this.board)
-        this.showAvailableMoves()
+        //this.showAvailableMoves()
     }
 
     /**
@@ -48,8 +49,24 @@ export default class Game {
             this.eatedBy[figure.getColor()].push(target)
         }
 
-        // Перемещаю фигуру
-        this.board.setFigure(x, y, figure)
+        // Проверяю рокировку
+        if (figure.constructor == King && target.constructor == Rook && !figure.beenMoved && !target.beenMoved) {
+            var figx = figure.x
+            if (figure.x < target.x) {
+                // короткая
+                this.board.setFigure(figx + 2, figure.y, figure)
+                this.board.setFigure(figx + 1, figure.y, target)
+            } else {
+                // Длинная
+                this.board.setFigure(figx - 2, figure.y, figure)
+                this.board.setFigure(figx - 1, figure.y, target)
+            }
+        } else {
+
+            // Перемещаю фигуру
+            this.board.setFigure(x, y, figure)
+        }
+
         this.queue = (this.queue == 'white') ? 'black' : 'white'
     }
 

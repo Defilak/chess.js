@@ -4,6 +4,9 @@ export const WHITE = 'white'
 export const BLACK = 'black'
 
 export class Figure {
+    // true если фигура делала первый ход
+    beenMoved = false
+
     constructor(x, y, color) {
         this.x = x
         this.y = y
@@ -19,6 +22,7 @@ export class Figure {
     move(x, y) {
         this.x = x
         this.y = y
+        this.beenMoved = true
     }
 
     /**
@@ -39,7 +43,7 @@ export class Pawn extends Figure {
         const moves = []
 
         // Пешка может ходить вперёд на свободное поле, расположенное непосредственно перед ней на той же самой вертикали.
-        if(!board.getFigure(this.x, this.y - 1)) {
+        if (!board.getFigure(this.x, this.y - 1)) {
             addMove(this.x, this.y - 1, moves)
         }
 
@@ -55,7 +59,7 @@ export class Pawn extends Figure {
         if (figure && figure.getColor() != this.getColor()) {
             addMove(this.x + 1, this.y - 1, moves)
         }
-        
+
         figure = board.getFigure(this.x - 1, this.y - 1)
         if (figure && figure.getColor() != this.getColor()) {
             addMove(this.x - 1, this.y - 1, moves)
@@ -183,7 +187,7 @@ export class Queen extends Figure {
 
         //ферзь может перемещаться на любое число свободных полей в любом направлении по прямой, совмещая в себе возможности ладьи и слона.
 
-        //Беру ходы слона и ферзя
+        //Беру ходы слона и ладьи
         const rook = new Rook(this.x, this.y, this.color)
         moves = moves.concat(rook.getMoves(board))
 
@@ -200,8 +204,8 @@ export class King extends Figure {
 
         // Доступные ходы вражеских фигур
         // Т.к. для черных фигур доска перевернута, ее требуется перевернуть заного
+        // (по какой то причине работает и так лол)
         const enemyMoves = board.getAllMoves(this.getColor() == 'white' ? 'black' : 'white').flat()
-        console.log(enemyMoves)
 
         //Король может перемещаться в любом направлении, но только на 1 поле.
         //Минимальное расстояние между королями обеих сторон всегда должно составлять одно поле, которое ни один из них не имеет права занимать
@@ -210,17 +214,39 @@ export class King extends Figure {
                 const figure = board.getFigure(this.x + x, this.y + y)
                 if (!figure || figure.getColor() != this.getColor()) {
                     // Проверяю что этот ход не содержится в списке ходов противника
-                    if(enemyMoves.indexOf(xyToId(this.x + x, this.y + y)) < 0) {
-
+                    if (enemyMoves.indexOf(xyToId(this.x + x, this.y + y)) < 0) {
                         addMove(this.x + x, this.y + y, moves)
                     }
                 }
             }
         }
 
-        console.log(moves)
+        // Проверяю возможность рокировки
+        if (!this.beenMoved) {
+            // Короткая рокировка
+            for (var i = 1; i < 4; i++) {
+                const figure = board.getFigure(this.x + i, this.y)
+                // Проверка на цвет не нужна т.к. для этого фигура должна быть сдвинута
+                if (i == 3 && figure && figure.constructor == Rook && !figure.beenMoved) {
+                    addMove(this.x + i, this.y, moves)
+                }
 
-        // Сортирую полученные ходы
+                // Если на пути стоит фигура, рокировка недоступна
+                if (figure)
+                    break
+            }
+
+            // Длинная рокировка
+            for (var i = 1; i < 5; i++) {
+                const figure = board.getFigure(this.x - i, this.y)
+                if (i == 4 && figure && figure.constructor == Rook && !figure.beenMoved) {
+                    addMove(this.x - i, this.y, moves)
+                }
+
+                if (figure)
+                    break
+            }
+        }
 
         return moves
     }
