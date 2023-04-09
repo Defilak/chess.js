@@ -36,7 +36,8 @@ export class Figure {
  */
 export class Pawn extends Figure {
     // Флаг, указывающий что пешка была сдвинута на середину поля первым ходом
-    //forcedMove = false
+    // Сбрасывается при последующих ходах
+    longMove = false
 
     // Для черных переворачиваю доску см. Game.getMovesFor
     getMoves(board) {
@@ -65,9 +66,28 @@ export class Pawn extends Figure {
             addMove(this.x - 1, this.y - 1, moves)
         }
 
-        //todo: Пешка, атакующая поле, пересечённое пешкой партнёра, который продвинул её с исходной позиции сразу на два поля, может взять эту продвинутую пешку, как если бы последний её ход был только на одно поле. Это взятие может быть сделано только очередным ходом и называется «взятием на проходе».
+        //Пешка, атакующая поле, пересечённое пешкой партнёра, который продвинул её с исходной позиции сразу на два поля, может взять эту продвинутую пешку, как если бы последний её ход был только на одно поле. Это взятие может быть сделано только очередным ходом и называется «взятием на проходе».
+        var figure = board.getFigure(this.x - 1, this.y)
+        if(figure && figure.constructor == Pawn && figure.longMove) {
+            addMove(this.x - 1, this.y - 1, moves)
+        }
+
+        var figure = board.getFigure(this.x + 1, this.y)
+        if(figure && figure.constructor == Pawn && figure.longMove) {
+            addMove(this.x + 1, this.y - 1, moves)
+        }
 
         return moves
+    }
+
+    move(x, y) {
+        if(Math.abs(y - this.y) > 1) {
+            this.longMove = true
+        } else {
+            this.longMove = false
+        }
+
+        super.move(x, y)
     }
 }
 
@@ -208,6 +228,7 @@ export class King extends Figure {
             for (var x = -1; x < 2; x++) {
                 const figure = board.getFigure(this.x + x, this.y + y)
                 if (!figure || figure.getColor() != this.getColor()) {
+                    //console.log(xyToId(this.x + x, this.y + y))
                     addMove(this.x + x, this.y + y, moves)
                 }
             }

@@ -6,6 +6,9 @@ export default class Board {
     // Это матрица стола
     map = [Array(8), Array(8), Array(8), Array(8), Array(8), Array(8), Array(8), Array(8)]
 
+    // true если перевернут
+    rotated = false
+
     constructor() {
         this.map.forEach((arr, y) => arr.fill(null))
     }
@@ -23,6 +26,8 @@ export default class Board {
                 }
             })
         })
+
+        this.rotated = !this.rotated
     }
 
     getFigure(x, y) {
@@ -42,7 +47,11 @@ export default class Board {
 
     setFigure(x, y, figure) {
         //todo: дублирование данных
-        this.map[figure.y][figure.x] = false
+        if(!figure) {
+            this.map[y][x] = null
+            return
+        }
+        this.map[figure.y][figure.x] = null
         this.map[y][x] = figure
         figure.move(x, y)
     }
@@ -78,26 +87,12 @@ export default class Board {
 
         const template = [Rook, Horse, Bishop, Queen, King, Bishop, Horse, Rook];
         for (var x = 0; x < 8; x++) {
-            //this.addFigure(x, 0, template[x], 'black')
-            //this.addFigure(x, 1, Pawn, 'black')
-            //this.addFigure(x, 6, Pawn, 'white')
-            //this.addFigure(x, 7, template[x], 'white')
-
-            //this.addFigure(1, 5, Bishop, 'black')
-            //this.addFigure(6, 7, Horse, 'white')
-            this.addFigure(0, 7, Rook, 'white')
-            this.addFigure(7, 7, Rook, 'white')
-            this.addFigure(4, 7, King, 'white')
-
-            this.addFigure(0, 0, Rook, 'black')
-            this.addFigure(7, 0, Rook, 'black')
-            this.addFigure(3, 0, King, 'black')
-
-            //this.setCell(0, 6, Pawn, 'white')
-            //this.setCell(0, 7, Rook, 'white')
-            //this.setCell(3, 4, Pawn, 'black')
-            //this.setCell(1, 5, Pawn, 'black')
-            //this.setCell(7, 7, Pawn, 'white')
+            this.addFigure(x, 0, template[x], 'black')
+            this.addFigure(x, 1, Pawn, 'black')
+            this.addFigure(x, 6, Pawn, 'white')
+            this.addFigure(x, 7, template[x], 'white')
         }
+        //this.addFigure(4, 3, Pawn, 'white')
+        //this.addFigure(3, 3, King, 'black') 
     }
 }

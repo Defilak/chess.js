@@ -53,6 +53,7 @@ export default class Screen {
             //var moves = this.selected.getMoves(board)
             moves.forEach(i => {
                 if (i < this.boardEl.childNodes.length && i >= 0) {
+                    
                     this.boardEl.childNodes[i].style.backgroundColor = 'red'
                     this.boardEl.childNodes[i].onclick = () => {
                         const coords = idToXy(i)
@@ -81,6 +82,7 @@ export default class Screen {
             arr.forEach((cell, x) => {
                 const cellEl = document.createElement('div')
                 cellEl.className = 'cell ' + ((x % 2 == y % 2) ? 'white' : 'black')
+                //cellEl.innerHTML = xyToId(x, y)
                 if (cell) {
                     // Рисую фигуры
                     if (cell.getColor() == 'white') {
@@ -103,6 +105,7 @@ export default class Screen {
     onClickCell(cellEl, cell) {
         // фигура того же цвета что и очередность хода
         const isGoodColor = cell && cell.getColor() == this.game.getMoveQueue()
+        //const isGoodColor = true
         if (this.selected === false && isGoodColor) {
             this.selected = cell
         } else {
