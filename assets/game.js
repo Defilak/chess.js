@@ -62,7 +62,6 @@ export default class Game {
                 this.board.setFigure(figx - 1, figure.y, target)
             }
         } else {
-
             // Перемещаю фигуру
             this.board.setFigure(x, y, figure)
         }
@@ -74,13 +73,32 @@ export default class Game {
      * Возвращает доступные фигуре ходы в зависимости от ее цвета
      */
     getMovesFor(figure) {
-        var map = this.board.map
         if (figure.getColor() == 'black') {
             // Переворачиваю карту для того чтобы не переписывать вычисления ходов для черных фигур
             this.board.rotateBoard()
         }
 
-        const moves = figure.getMoves(this.board)
+        var moves = figure.getMoves(this.board)
+
+        // Если фигура - король, фильтрую невозможные ходы
+        if (figure.constructor == King) {
+            const enemyMoves = this.board.getAllMoves(figure.getColor() == 'white' ? 'black' : 'white').flat()
+            moves = moves.filter(i => {
+                // Для реализации рокировки захардкодил положения ладьи
+                // Т.к. считается что этот ход поставит короля под мат из за особенности отображения возможных ходов
+                if (i == 56 || i == 63) {
+                    // Проверяю что здесь союзная ладья
+                    var coord = idToXy(i)
+                    var target = this.board.getFigure(coord.x, coord.y)
+                    if (target && target.constructor == Rook && figure.getColor() == target.getColor()) {
+                        console.log(target)
+                        return true
+                    }
+                }
+
+                return enemyMoves.indexOf(i) < 0
+            })
+        }
 
         if (figure.getColor() == 'black') {
             // переворачиваю обратно)

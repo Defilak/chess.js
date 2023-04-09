@@ -17,8 +17,10 @@ export default class Board {
         this.map = rotateMatrix(this.map)
         this.map.forEach((horisontal, y) => {
             horisontal.forEach((figure, x) => {
-                if (figure)
-                    figure.move(x, y)
+                if (figure) {
+                    figure.x = x
+                    figure.y = y
+                }
             })
         })
     }
@@ -81,8 +83,15 @@ export default class Board {
             //this.addFigure(x, 6, Pawn, 'white')
             //this.addFigure(x, 7, template[x], 'white')
 
-            this.addFigure(1, 5, Bishop, 'black')
+            //this.addFigure(1, 5, Bishop, 'black')
+            //this.addFigure(6, 7, Horse, 'white')
+            this.addFigure(0, 7, Rook, 'white')
+            this.addFigure(7, 7, Rook, 'white')
             this.addFigure(4, 7, King, 'white')
+
+            this.addFigure(0, 0, Rook, 'black')
+            this.addFigure(7, 0, Rook, 'black')
+            this.addFigure(3, 0, King, 'black')
 
             //this.setCell(0, 6, Pawn, 'white')
             //this.setCell(0, 7, Rook, 'white')

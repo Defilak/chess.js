@@ -202,21 +202,13 @@ export class King extends Figure {
     getMoves(board) {
         const moves = []
 
-        // Доступные ходы вражеских фигур
-        // Т.к. для черных фигур доска перевернута, ее требуется перевернуть заного
-        // (по какой то причине работает и так лол)
-        const enemyMoves = board.getAllMoves(this.getColor() == 'white' ? 'black' : 'white').flat()
-
         //Король может перемещаться в любом направлении, но только на 1 поле.
         //Минимальное расстояние между королями обеих сторон всегда должно составлять одно поле, которое ни один из них не имеет права занимать
         for (var y = -1; y < 2; y++) {
             for (var x = -1; x < 2; x++) {
                 const figure = board.getFigure(this.x + x, this.y + y)
                 if (!figure || figure.getColor() != this.getColor()) {
-                    // Проверяю что этот ход не содержится в списке ходов противника
-                    if (enemyMoves.indexOf(xyToId(this.x + x, this.y + y)) < 0) {
-                        addMove(this.x + x, this.y + y, moves)
-                    }
+                    addMove(this.x + x, this.y + y, moves)
                 }
             }
         }
@@ -227,7 +219,7 @@ export class King extends Figure {
             for (var i = 1; i < 4; i++) {
                 const figure = board.getFigure(this.x + i, this.y)
                 // Проверка на цвет не нужна т.к. для этого фигура должна быть сдвинута
-                if (i == 3 && figure && figure.constructor == Rook && !figure.beenMoved) {
+                if (i == 3 && figure && figure.constructor == Rook && !figure.beenMoved && figure.getColor() == this.getColor()) {
                     addMove(this.x + i, this.y, moves)
                 }
 
@@ -239,7 +231,7 @@ export class King extends Figure {
             // Длинная рокировка
             for (var i = 1; i < 5; i++) {
                 const figure = board.getFigure(this.x - i, this.y)
-                if (i == 4 && figure && figure.constructor == Rook && !figure.beenMoved) {
+                if (i == 4 && figure && figure.constructor == Rook && !figure.beenMoved && figure.getColor() == this.getColor()) {
                     addMove(this.x - i, this.y, moves)
                 }
 
