@@ -31,24 +31,12 @@ export class Figure {
  * Пешка
  */
 export class Pawn extends Figure {
+    // Флаг, указывающий что пешка была сдвинута на середину поля первым ходом
+    //forcedMove = false
 
     // Для черных переворачиваю доску см. Game.getMovesFor
     getMoves(board) {
         const moves = []
-
-        const checkPath = (x, y) => {
-            var figure = board.getFigure(x, y)
-            if (!figure) {
-                addMove(x, y, moves)
-                return true
-            }
-
-            if (figure.getColor() != this.getColor()) {
-                addMove(figure.x, figure.y, moves)
-            }
-
-            return false
-        }
 
         // Пешка может ходить вперёд на свободное поле, расположенное непосредственно перед ней на той же самой вертикали.
         if(!board.getFigure(this.x, this.y - 1)) {
@@ -185,38 +173,6 @@ export class Bishop extends Figure {
             if (checkPath(this.x + i, this.y - i) === false)
                 break
 
-        // Недоделанный вариант в 1 цикл. Слишком грязно и непонятно.
-        // Флаги остановки возможных ходов
-        /*var xy1 = true, xy2 = true, xy3 = true, xy4 = true
-        for(var i = 0; i < 8; i++) {
-            if(!board.getFigure(this.x + i, this.y + i) && xy1) {
-                addMove(this.x + i, this.y + i, moves)
-            } else if (board.getFigure(this.x + i, this.y + i).getColor() != this.getColor()) {
-                addMove(this.x + i, this.y + i, moves)
-                xy1 = false
-            } else {
-                xy1 = false
-            }
-
-            if(!board.getFigure(this.x - i, this.y - i) && xy2) {
-                addMove(this.x - i, this.y - i, moves)
-            } else {
-                xy2 = false
-            }
-
-            if(!board.getFigure(this.x + i, this.y - i) && xy3) {
-                addMove(this.x + i, this.y - i, moves)
-            } else {
-                xy3 = false
-            }
-
-            if(!board.getFigure(this.x - i, this.y + i) && xy4) {
-                addMove(this.x - i, this.y + i, moves)
-            } else {
-                xy4 = false
-            }
-        }*/
-
         return moves
     }
 }
@@ -242,16 +198,29 @@ export class King extends Figure {
     getMoves(board) {
         const moves = []
 
+        // Доступные ходы вражеских фигур
+        // Т.к. для черных фигур доска перевернута, ее требуется перевернуть заного
+        const enemyMoves = board.getAllMoves(this.getColor() == 'white' ? 'black' : 'white').flat()
+        console.log(enemyMoves)
+
         //Король может перемещаться в любом направлении, но только на 1 поле.
         //Минимальное расстояние между королями обеих сторон всегда должно составлять одно поле, которое ни один из них не имеет права занимать
         for (var y = -1; y < 2; y++) {
             for (var x = -1; x < 2; x++) {
                 const figure = board.getFigure(this.x + x, this.y + y)
                 if (!figure || figure.getColor() != this.getColor()) {
-                    addMove(this.x + x, this.y + y, moves)
+                    // Проверяю что этот ход не содержится в списке ходов противника
+                    if(enemyMoves.indexOf(xyToId(this.x + x, this.y + y)) < 0) {
+
+                        addMove(this.x + x, this.y + y, moves)
+                    }
                 }
             }
         }
+
+        console.log(moves)
+
+        // Сортирую полученные ходы
 
         return moves
     }
