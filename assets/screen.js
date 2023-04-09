@@ -66,14 +66,21 @@ export default class Screen {
         }
     }
 
+    showMoves(arr) {
+        arr.forEach(figure => {
+            figure.forEach(i => {
+                this.boardEl.childNodes[i].style.backgroundColor = 'blue'
+            })
+        })
+    }
+
     drawBoard(board) {
         this.boardEl.innerHTML = ''
-        
+
         board.map.forEach((arr, y) => {
             arr.forEach((cell, x) => {
                 const cellEl = document.createElement('div')
                 cellEl.className = 'cell ' + ((x % 2 == y % 2) ? 'white' : 'black')
-
                 if (cell) {
                     // Рисую фигуры
                     if (cell.getColor() == 'white') {
@@ -96,7 +103,7 @@ export default class Screen {
     onClickCell(cellEl, cell) {
         // фигура того же цвета что и очередность хода
         const isGoodColor = cell && cell.getColor() == this.game.getMoveQueue()
-        if(this.selected === false && isGoodColor) {
+        if (this.selected === false && isGoodColor) {
             this.selected = cell
         } else {
             this.selected = false
@@ -117,7 +124,7 @@ export default class Screen {
             const el = document.createElement('div')
             el.className = 'cell'
             el.innerHTML = Sprites.black[figure.constructor]
-            
+
             this.scoreWhite.append(el)
         })
 
@@ -126,7 +133,7 @@ export default class Screen {
             const el = document.createElement('div')
             el.className = 'cell'
             el.innerHTML = Sprites.white[figure.constructor]
-            
+
             this.scoreBlack.append(el)
         })
     }

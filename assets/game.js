@@ -20,6 +20,7 @@ export default class Game {
     start() {
         this.board.fillStartingPositions()
         this.screen.render(this.board)
+        this.showAvailableMoves()
     }
 
     /**
@@ -30,12 +31,20 @@ export default class Game {
     }
 
     /**
+     * Показать все доступные ходы
+     * @param {*} color если указан, покажет ходы для цвета.
+     */
+    showAvailableMoves(color = false) {
+        this.screen.showMoves(this.board.getAllMoves(color))
+    }
+
+    /**
      * Передвинуть фигуру на указанные координаты
      */
     makeMove(figure, x, y) {
         const target = this.board.getFigure(x, y)
         // Забираю если есть что
-        if(target && target.getColor() != figure.getColor()) {
+        if (target && target.getColor() != figure.getColor()) {
             this.eatedBy[figure.getColor()].push(target)
         }
 
@@ -49,14 +58,14 @@ export default class Game {
      */
     getMovesFor(figure) {
         var map = this.board.map
-        if(figure.getColor() == 'black') {
+        if (figure.getColor() == 'black') {
             // Переворачиваю карту для того чтобы не переписывать вычисления ходов для черных фигур
             this.board.rotateBoard()
         }
 
         const moves = figure.getMoves(this.board)
 
-        if(figure.getColor() == 'black') {
+        if (figure.getColor() == 'black') {
             // переворачиваю обратно)
             this.board.rotateBoard()
 
