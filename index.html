@@ -16,6 +16,7 @@
             height: 100vh;
             display: flex;
             flex-direction: row;
+            flex-wrap: wrap;
             justify-content: center;
             align-items: center;
             background-color: lightgray;
@@ -111,6 +112,17 @@
             display:flex;
         }
 
+        .mt {
+            margin-top: 2em;
+        }
+
+        #history_list {
+            height: 200px;
+            overflow-y: auto;
+            list-style-type: decimal;
+            font-size: 1.5rem;
+        }
+
     </style>
 
 </head>
@@ -156,6 +168,13 @@
                     <div id="score_black"></div>
                 </div>
             </div>
+        </div>
+
+        <div class="info-card mt">
+            <h3>История ходов</h3>
+            <ul id="history_list">
+                
+            </ul>
         </div>
     </div>
 
